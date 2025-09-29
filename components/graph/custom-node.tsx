@@ -89,7 +89,7 @@ function CustomNodeComponent({ data, id }: NodeProps) {
           ${getNodeColor()}
         `}
       >
-        {data.label || id}
+        {String(data.label || id)}
       </div>
 
       <Handle

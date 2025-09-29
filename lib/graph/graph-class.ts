@@ -53,11 +53,9 @@ export class GraphManager {
 
   addEdge(edge: Edge): void {
     if (this.findEdge(edge.id)) {
-      console.warn(`Edge with id ${edge.id} already exists, skipping`);
       return;
     }
     if (!this.findNode(edge.source) || !this.findNode(edge.target)) {
-      console.warn("Source or target node does not exist, skipping");
       return;
     }
     this.graph.edges.push(edge);

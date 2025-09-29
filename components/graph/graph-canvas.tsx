@@ -126,11 +126,8 @@ function GraphCanvasInner() {
   // Handle canvas click for adding nodes
   const onPaneClick = useCallback(
     (event: React.MouseEvent) => {
-      console.log("onPaneClick triggered, editMode:", editMode);
-
       // If in add-edge mode and user clicks on empty space, reset edge creation
       if (editMode === "add-edge" && tempEdgeStart) {
-        console.log("Cancelled edge creation by clicking on empty space");
         setTempEdgeStart(null);
         return;
       }
@@ -142,12 +139,8 @@ function GraphCanvasInner() {
           y: event.clientY,
         });
 
-        console.log("Adding node at position:", position);
-
         // Generate unique node ID
         const newNodeId = String.fromCharCode(65 + graph.nodes.length);
-
-        console.log("New node ID:", newNodeId);
 
         addNodeToStore({
           id: newNodeId,
@@ -155,8 +148,6 @@ function GraphCanvasInner() {
           x: position.x,
           y: position.y,
         });
-
-        console.log("Node added to store, current nodes:", graph.nodes);
       }
     },
     [editMode, graph.nodes.length, addNodeToStore, screenToFlowPosition, tempEdgeStart]
@@ -173,7 +164,6 @@ function GraphCanvasInner() {
         } else {
           // Prevent self-loops
           if (tempEdgeStart === node.id) {
-            console.warn("Cannot create edge from node to itself");
             setTempEdgeStart(null);
             return;
           }

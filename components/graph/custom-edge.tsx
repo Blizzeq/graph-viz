@@ -104,7 +104,7 @@ function CustomEdgeComponent({
           }}
           className="nodrag nopan bg-white dark:bg-slate-800 px-2 py-1 rounded border border-slate-300 dark:border-slate-600 font-semibold"
         >
-          {data?.weight || 1}
+          {String(data?.weight || 1)}
         </div>
       </EdgeLabelRenderer>
     </>

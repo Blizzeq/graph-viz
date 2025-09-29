@@ -33,7 +33,7 @@ export function reactFlowToGraph(
 ): Graph {
   const graphNodes: Node[] = nodes.map((node) => ({
     id: node.id,
-    label: node.data.label || node.id,
+    label: String(node.data.label || node.id),
     x: node.position.x,
     y: node.position.y,
     data: node.data,
@@ -43,7 +43,7 @@ export function reactFlowToGraph(
     id: edge.id,
     source: edge.source,
     target: edge.target,
-    weight: edge.data?.weight || 1,
+    weight: Number(edge.data?.weight || 1),
   }));
 
   return {
