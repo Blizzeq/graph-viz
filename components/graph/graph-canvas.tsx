@@ -81,9 +81,7 @@ function GraphCanvasInner() {
 
   // Update React Flow when graph changes
   useEffect(() => {
-    console.log("Graph changed, updating React Flow. Node count:", graph.nodes.length);
     const { nodes: newNodes, edges: newEdges } = graphToReactFlow(graph);
-    console.log("Setting nodes:", newNodes);
 
     // Highlight the first node if in edge creation mode
     if (tempEdgeStart && editMode === "add-edge") {

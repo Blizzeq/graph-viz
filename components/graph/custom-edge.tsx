@@ -7,8 +7,10 @@ import {
   EdgeProps,
   getBezierPath,
   getStraightPath,
+  MarkerType,
 } from "@xyflow/react";
 import { useAlgorithmStore } from "@/lib/store/algorithm-store";
+import { useGraphStore } from "@/lib/store/graph-store";
 
 function CustomEdgeComponent({
   id,
@@ -22,6 +24,7 @@ function CustomEdgeComponent({
   markerEnd,
 }: EdgeProps) {
   const currentStep = useAlgorithmStore((state) => state.getCurrentStep());
+  const graph = useGraphStore((state) => state.graph);
 
   const isActive = currentStep?.activeEdges.includes(id);
   const isInPath = currentStep?.pathSoFar && currentStep.pathSoFar.length > 1;
@@ -64,10 +67,27 @@ function CustomEdgeComponent({
 
   return (
     <>
+      <defs>
+        <marker
+          id={`arrow-${id}`}
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto-start-reverse"
+        >
+          <path
+            d="M 0 0 L 10 5 L 0 10 z"
+            fill={edgeColor}
+            stroke="none"
+          />
+        </marker>
+      </defs>
       <BaseEdge
         id={id}
         path={edgePath}
-        markerEnd={markerEnd}
+        markerEnd={graph.directed ? `url(#arrow-${id})` : undefined}
         style={{
           stroke: edgeColor,
           strokeWidth: edgeWidth,

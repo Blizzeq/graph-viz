@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 import {
   SkipBack,
   ChevronLeft,
@@ -11,7 +12,8 @@ import {
   ChevronRight,
   SkipForward,
   RotateCcw,
-  Zap
+  Zap,
+  Loader2
 } from "lucide-react";
 import { useAlgorithmStore } from "@/lib/store/algorithm-store";
 import { useGraphStore } from "@/lib/store/graph-store";
@@ -36,6 +38,8 @@ export function BottomControls() {
   const skipToStart = useAlgorithmStore((state) => state.skipToStart);
   const skipToEnd = useAlgorithmStore((state) => state.skipToEnd);
   const reset = useAlgorithmStore((state) => state.reset);
+
+  const [isInstantLoading, setIsInstantLoading] = useState(false);
 
   usePlayback();
 
@@ -71,15 +75,22 @@ export function BottomControls() {
   const handleInstantSolve = () => {
     // If no steps yet, generate them first
     if (!hasSteps && canRun && algorithm && startNode) {
-      const newSteps = runAlgorithm(algorithm, graph, startNode, endNode);
-      setSteps(newSteps);
-      // Skip to end immediately
-      if (newSteps.length > 0) {
-        setPlaying(false);
-        setTimeout(() => {
-          skipToEnd();
-        }, 0);
-      }
+      setIsInstantLoading(true);
+      // Use setTimeout to allow UI to update with loading state
+      setTimeout(() => {
+        const newSteps = runAlgorithm(algorithm, graph, startNode, endNode);
+        setSteps(newSteps);
+        // Skip to end immediately
+        if (newSteps.length > 0) {
+          setPlaying(false);
+          setTimeout(() => {
+            skipToEnd();
+            setIsInstantLoading(false);
+          }, 0);
+        } else {
+          setIsInstantLoading(false);
+        }
+      }, 10);
     } else if (hasSteps) {
       // If already have steps, just skip to end
       skipToEnd();
@@ -165,11 +176,20 @@ export function BottomControls() {
             variant="secondary"
             size="sm"
             className="gap-1.5 ml-2"
-            disabled={!canRun && !hasSteps}
+            disabled={(!canRun && !hasSteps) || isInstantLoading}
             onClick={handleInstantSolve}
           >
-            <Zap className="h-3.5 w-3.5" />
-            Instant
+            {isInstantLoading ? (
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                Solving...
+              </>
+            ) : (
+              <>
+                <Zap className="h-3.5 w-3.5" />
+                Instant
+              </>
+            )}
           </Button>
         </div>
 

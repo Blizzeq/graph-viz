@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Shuffle } from "lucide-react";
 import { useGraphStore } from "@/lib/store/graph-store";
 import { useAlgorithmStore } from "@/lib/store/algorithm-store";
@@ -14,7 +15,9 @@ import { generateRandomGraph, generateEmptyGraph } from "@/lib/graph/graph-gener
 import { AlgorithmSelector } from "@/components/algorithm/algorithm-selector";
 
 export function LeftPanel() {
+  const graph = useGraphStore((state) => state.graph);
   const setGraph = useGraphStore((state) => state.setGraph);
+  const setDirected = useGraphStore((state) => state.setDirected);
   const triggerFitView = useGraphStore((state) => state.triggerFitView);
   const setSteps = useAlgorithmStore((state) => state.setSteps);
   const setPlaying = useAlgorithmStore((state) => state.setPlaying);
@@ -43,7 +46,7 @@ export function LeftPanel() {
     const randomGraph = generateRandomGraph({
       nodeCount: actualNodeCount,
       edgeDensity,
-      directed: false,
+      directed: graph.directed,
       minWeight: 1,
       maxWeight: 10,
       // canvasWidth and canvasHeight will be automatically adjusted based on nodeCount
@@ -66,6 +69,17 @@ export function LeftPanel() {
           <CardTitle className="text-lg">Graph Setup</CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="flex items-center justify-between mb-4">
+            <Label htmlFor="directed-mode" className="text-sm">Directed Graph</Label>
+            <Switch
+              id="directed-mode"
+              checked={graph.directed}
+              onCheckedChange={(checked) => {
+                resetVisualization();
+                setDirected(checked);
+              }}
+            />
+          </div>
           <Tabs defaultValue="presets" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="presets">Presets</TabsTrigger>

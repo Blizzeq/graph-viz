@@ -3,9 +3,16 @@
 import { memo } from "react";
 import { Handle, Position, NodeProps } from "@xyflow/react";
 import { useAlgorithmStore } from "@/lib/store/algorithm-store";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function CustomNodeComponent({ data, id }: NodeProps) {
   const currentStep = useAlgorithmStore((state) => state.getCurrentStep());
+  const algorithm = useAlgorithmStore((state) => state.algorithm);
 
   const getNodeColor = () => {
     // Highlight if this is the start of an edge being created
@@ -31,7 +38,39 @@ function CustomNodeComponent({ data, id }: NodeProps) {
     return "bg-slate-300 border-slate-400";
   };
 
-  return (
+  const getTooltipContent = () => {
+    if (!currentStep || !algorithm) return null;
+
+    const parts: string[] = [`Node: ${data.label || id}`];
+
+    // Distance/cost
+    if (currentStep.distances && currentStep.distances[id] !== undefined) {
+      const dist = currentStep.distances[id];
+      parts.push(`Distance: ${dist === Infinity ? "∞" : dist.toFixed(1)}`);
+    }
+
+    // F-score for A*
+    if (algorithm === "astar" && currentStep.fScores && currentStep.fScores[id] !== undefined) {
+      parts.push(`F-score: ${currentStep.fScores[id].toFixed(1)}`);
+    }
+
+    // Status
+    if (currentStep.currentNode === id) {
+      parts.push("Status: Currently checking");
+    } else if (currentStep.pathSoFar?.includes(id)) {
+      parts.push("Status: In shortest path");
+    } else if (currentStep.visitedNodes.includes(id)) {
+      parts.push("Status: Visited");
+    } else if (currentStep.queuedNodes.includes(id)) {
+      parts.push("Status: In queue");
+    }
+
+    return parts.join("\n");
+  };
+
+  const tooltipContent = getTooltipContent();
+
+  const nodeElement = (
     <div className="relative">
       <Handle
         type="target"
@@ -61,6 +100,24 @@ function CustomNodeComponent({ data, id }: NodeProps) {
       />
     </div>
   );
+
+  // Show tooltip only during algorithm visualization
+  if (tooltipContent) {
+    return (
+      <TooltipProvider>
+        <Tooltip delayDuration={200}>
+          <TooltipTrigger asChild>
+            {nodeElement}
+          </TooltipTrigger>
+          <TooltipContent className="whitespace-pre-line text-xs">
+            {tooltipContent}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+
+  return nodeElement;
 }
 
 export const CustomNode = memo(CustomNodeComponent);
