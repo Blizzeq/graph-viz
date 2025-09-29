@@ -244,9 +244,13 @@ function GraphCanvasInner() {
         <Controls />
         <MiniMap
           nodeColor={(node) => {
-            return "#cbd5e1";
+            return "#3b82f6";
           }}
-          className="!bg-slate-100 dark:!bg-slate-800"
+          maskColor="rgb(248, 250, 252, 0.7)"
+          className="!bg-slate-50/60 dark:!bg-slate-900/60 !border !border-slate-300/60 dark:!border-slate-600/60 !shadow-sm"
+          style={{
+            backgroundColor: "rgba(248, 250, 252, 0.6)",
+          }}
         />
         <EditToolbar />
 
