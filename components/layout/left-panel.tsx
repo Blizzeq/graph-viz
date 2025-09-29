@@ -63,7 +63,7 @@ export function LeftPanel() {
   };
 
   return (
-    <div className="w-80 border-r border-border bg-card p-4 overflow-y-auto">
+    <div className="w-72 xl:w-80 border-r border-border bg-card p-3 xl:p-4 overflow-y-auto">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Graph Setup</CardTitle>

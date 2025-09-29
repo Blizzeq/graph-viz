@@ -62,11 +62,11 @@ export function AlgorithmSelector() {
 
         {algorithm && (
           <>
-            <div className="text-xs text-muted-foreground p-3 bg-slate-100 dark:bg-slate-800 rounded">
+            <div className="text-xs text-muted-foreground p-2.5 xl:p-3 bg-slate-100 dark:bg-slate-800 rounded">
               {algorithmInfo[algorithm].description}
             </div>
 
-            <Badge variant="outline">{algorithmInfo[algorithm].complexity}</Badge>
+            <Badge variant="outline" className="text-xs">{algorithmInfo[algorithm].complexity}</Badge>
 
             <div>
               <Label htmlFor="start-node">Start Node</Label>
@@ -102,8 +102,8 @@ export function AlgorithmSelector() {
               </div>
             )}
 
-            <div className="text-xs text-muted-foreground mt-4 p-2 bg-blue-50 dark:bg-blue-950/20 rounded border border-blue-200 dark:border-blue-800">
-              💡 Use the Play button in the bottom controls to start the visualization
+            <div className="text-xs text-muted-foreground mt-4 p-2 xl:p-2.5 bg-blue-50 dark:bg-blue-950/20 rounded border border-blue-200 dark:border-blue-800">
+              💡 <span className="hidden xl:inline">Use the Play button in the bottom controls to start the visualization</span><span className="xl:hidden">Press Play to start</span>
             </div>
           </>
         )}

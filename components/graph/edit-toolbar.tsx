@@ -18,7 +18,7 @@ export function EditToolbar() {
   ];
 
   return (
-    <div className="absolute top-4 left-4 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-3 z-10">
+    <div className="absolute top-3 xl:top-4 left-3 xl:left-4 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-2 xl:p-3 z-10">
       <div className="flex gap-1">
         {modes.map((mode) => {
           const Icon = mode.icon;
@@ -30,17 +30,17 @@ export function EditToolbar() {
               size="icon"
               onClick={() => setEditMode(mode.value)}
               className={cn(
-                "h-9 w-9",
+                "h-8 w-8 xl:h-9 xl:w-9",
                 isActive && "bg-primary text-primary-foreground"
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-3.5 w-3.5 xl:h-4 xl:w-4" />
             </Button>
           );
         })}
       </div>
 
-      <div className="text-xs text-muted-foreground mt-2 text-center min-h-[16px]">
+      <div className="text-[11px] xl:text-xs text-muted-foreground mt-2 text-center min-h-[14px] xl:min-h-[16px]">
         {modes.find((m) => m.value === editMode)?.label}
       </div>
     </div>

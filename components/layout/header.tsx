@@ -16,14 +16,14 @@ export function Header() {
   const [helpOpen, setHelpOpen] = useState(false);
 
   return (
-    <header className="h-16 border-b border-border bg-card px-6 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <Network className="h-8 w-8 text-primary" />
+    <header className="h-16 border-b border-border bg-card px-4 xl:px-6 flex items-center justify-between">
+      <div className="flex items-center gap-2 xl:gap-3">
+        <Network className="h-7 xl:h-8 w-7 xl:w-8 text-primary" />
         <div>
-          <h1 className="text-xl font-bold text-foreground">
+          <h1 className="text-lg xl:text-xl font-bold text-foreground">
             Graph Algorithm Visualizer
           </h1>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground hidden md:block">
             Interactive visualization of graph algorithms
           </p>
         </div>

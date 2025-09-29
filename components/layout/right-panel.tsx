@@ -45,7 +45,7 @@ export function RightPanel() {
   const isMSTAlgorithm = algorithm === "prim" || algorithm === "kruskal";
 
   return (
-    <div className="w-80 border-l border-border bg-card p-4 overflow-y-auto">
+    <div className="w-72 xl:w-80 border-l border-border bg-card p-3 xl:p-4 overflow-y-auto">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Statistics</CardTitle>

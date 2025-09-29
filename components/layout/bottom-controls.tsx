@@ -98,7 +98,7 @@ export function BottomControls() {
   };
 
   return (
-    <div className="h-20 border-t border-border bg-card px-6 flex items-center justify-between">
+    <div className="h-20 border-t border-border bg-card px-4 xl:px-6 flex items-center justify-between gap-4">
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
@@ -160,42 +160,42 @@ export function BottomControls() {
         </Button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">Speed:</span>
+      <div className="flex items-center gap-3 xl:gap-4">
+        <div className="flex items-center gap-2 xl:gap-3">
+          <span className="text-sm text-muted-foreground hidden lg:inline">Speed:</span>
           <Slider
             value={[speed]}
             onValueChange={(values) => setSpeed(values[0])}
             min={0.5}
             max={10}
             step={0.1}
-            className="w-32"
+            className="w-24 xl:w-32"
           />
-          <span className="text-sm font-medium w-12">{speed.toFixed(1)}x</span>
+          <span className="text-sm font-medium w-10 xl:w-12">{speed.toFixed(1)}x</span>
           <Button
             variant="secondary"
             size="sm"
-            className="gap-1.5 ml-2"
+            className="gap-1.5 ml-1 xl:ml-2"
             disabled={(!canRun && !hasSteps) || isInstantLoading}
             onClick={handleInstantSolve}
           >
             {isInstantLoading ? (
               <>
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                Solving...
+                <span className="hidden lg:inline">Solving...</span>
               </>
             ) : (
               <>
                 <Zap className="h-3.5 w-3.5" />
-                Instant
+                <span className="hidden lg:inline">Instant</span>
               </>
             )}
           </Button>
         </div>
 
-        <Separator orientation="vertical" className="h-8" />
+        <Separator orientation="vertical" className="h-8 hidden lg:block" />
 
-        <div className="text-sm min-w-[150px]">
+        <div className="text-sm min-w-[120px] xl:min-w-[150px] hidden lg:block">
           <span className="text-muted-foreground">Status: </span>
           <span className="font-medium">{getStatus()}</span>
         </div>
@@ -203,8 +203,8 @@ export function BottomControls() {
         {hasSteps && (
           <>
             <Separator orientation="vertical" className="h-8" />
-            <div className="text-sm min-w-[100px]">
-              <span className="text-muted-foreground">Step: </span>
+            <div className="text-sm min-w-[80px] xl:min-w-[100px]">
+              <span className="text-muted-foreground hidden xl:inline">Step: </span>
               <span className="font-medium">
                 {currentStepIndex + 1} / {steps.length}
               </span>
