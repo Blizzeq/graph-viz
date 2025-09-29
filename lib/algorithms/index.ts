@@ -3,6 +3,10 @@ import { AlgorithmStep, AlgorithmType } from "@/types/algorithm";
 import { dijkstraGenerator } from "./dijkstra";
 import { bfsGenerator } from "./bfs";
 import { dfsGenerator } from "./dfs";
+import { astarGenerator } from "./astar";
+import { bellmanFordGenerator } from "./bellman-ford";
+import { primGenerator } from "./prim";
+import { kruskalGenerator } from "./kruskal";
 
 export function getAlgorithmGenerator(
   algorithm: AlgorithmType,
@@ -17,6 +21,14 @@ export function getAlgorithmGenerator(
       return bfsGenerator(graph, startNode, endNode);
     case "dfs":
       return dfsGenerator(graph, startNode, endNode);
+    case "astar":
+      return astarGenerator(graph, startNode, endNode);
+    case "bellman-ford":
+      return bellmanFordGenerator(graph, startNode, endNode);
+    case "prim":
+      return primGenerator(graph, startNode, endNode);
+    case "kruskal":
+      return kruskalGenerator(graph, startNode, endNode);
     default:
       throw new Error(`Algorithm ${algorithm} not implemented yet`);
   }

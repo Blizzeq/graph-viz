@@ -25,7 +25,15 @@ export function AlgorithmSelector() {
   const setStartNode = useAlgorithmStore((state) => state.setStartNode);
   const setEndNode = useAlgorithmStore((state) => state.setEndNode);
 
-  const availableAlgorithms: AlgorithmType[] = ["dijkstra", "bfs", "dfs"];
+  const availableAlgorithms: AlgorithmType[] = [
+    "dijkstra",
+    "astar",
+    "bellman-ford",
+    "bfs",
+    "dfs",
+    "prim",
+    "kruskal",
+  ];
 
   return (
     <Card>
