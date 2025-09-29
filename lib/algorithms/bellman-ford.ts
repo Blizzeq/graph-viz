@@ -25,7 +25,7 @@ export function* bellmanFordGenerator(
     activeEdges: [],
     distances: { ...distances },
     previous: { ...previous },
-    explanation: `Starting Bellman-Ford from ${startNode}. Will relax all edges ${graph.nodes.length - 1} times.`,
+    explanation: `🔍 Starting Bellman-Ford from ${startNode}. Will relax all edges ${graph.nodes.length - 1} times to find shortest paths.`,
   };
 
   let stepNum = 1;
@@ -44,7 +44,7 @@ export function* bellmanFordGenerator(
       activeEdges: [],
       distances: { ...distances },
       previous: { ...previous },
-      explanation: `Iteration ${i + 1}/${nodeCount - 1}: Relaxing all edges...`,
+      explanation: `🔄 Iteration ${i + 1}/${nodeCount - 1}: Checking all edges for potential improvements...`,
     };
 
     for (const edge of graph.edges) {
@@ -65,7 +65,7 @@ export function* bellmanFordGenerator(
           activeEdges: [`${source}-${target}`],
           distances: { ...distances },
           previous: { ...previous },
-          explanation: `Relaxed edge ${source}→${target} (weight ${weight}). Distance to ${target} updated to ${distances[target].toFixed(1)}`,
+          explanation: `✓ Relaxed edge ${source}→${target} (weight ${weight}). New distance to ${target}: ${distances[target].toFixed(1)}`,
         };
       }
 
@@ -84,7 +84,7 @@ export function* bellmanFordGenerator(
           activeEdges: [`${target}-${source}`],
           distances: { ...distances },
           previous: { ...previous },
-          explanation: `Relaxed edge ${target}→${source} (weight ${weight}). Distance to ${source} updated to ${distances[source].toFixed(1)}`,
+          explanation: `✓ Relaxed edge ${target}→${source} (weight ${weight}). New distance to ${source}: ${distances[source].toFixed(1)}`,
         };
       }
     }
@@ -99,7 +99,7 @@ export function* bellmanFordGenerator(
         activeEdges: [],
         distances: { ...distances },
         previous: { ...previous },
-        explanation: `No updates in iteration ${i + 1}. Algorithm converged early!`,
+        explanation: `✅ No updates in iteration ${i + 1}. Algorithm converged early - optimal distances found!`,
       };
       break;
     }
@@ -115,7 +115,7 @@ export function* bellmanFordGenerator(
     activeEdges: [],
     distances: { ...distances },
     previous: { ...previous },
-    explanation: "Checking for negative-weight cycles...",
+    explanation: "🔍 Checking for negative-weight cycles...",
   };
 
   for (const edge of graph.edges) {

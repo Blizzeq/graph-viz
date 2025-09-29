@@ -19,7 +19,9 @@ export function* primGenerator(
     visitedNodes: [startNode],
     queuedNodes: Array.from(notInMST),
     activeEdges: [],
-    explanation: `Starting Prim's MST algorithm from node ${startNode}. Building minimum spanning tree...`,
+    mstEdges: [],
+    mstCost: 0,
+    explanation: `🌳 Starting Prim's MST algorithm from node ${startNode}. Building minimum spanning tree...`,
   };
 
   let stepNum = 1;
@@ -54,7 +56,9 @@ export function* primGenerator(
         currentNode: null,
         visitedNodes: visited,
         queuedNodes: Array.from(notInMST),
-        activeEdges: mstEdges,
+        activeEdges: [],
+        mstEdges: [...mstEdges],
+        mstCost: totalCost,
         explanation: `⚠️ Graph is disconnected. MST only includes ${inMST.size} nodes. Total cost: ${totalCost.toFixed(2)}`,
       };
       return;
@@ -73,8 +77,10 @@ export function* primGenerator(
       currentNode: minEdge.target,
       visitedNodes: [...visited],
       queuedNodes: Array.from(notInMST),
-      activeEdges: [...mstEdges],
-      explanation: `Added edge ${minEdge.source}→${minEdge.target} (weight ${minEdge.weight}) to MST. Total cost: ${totalCost.toFixed(2)}`,
+      activeEdges: [minEdge.id],
+      mstEdges: [...mstEdges],
+      mstCost: totalCost,
+      explanation: `✓ Added edge ${minEdge.source}→${minEdge.target} (weight ${minEdge.weight}) to MST. Total cost: ${totalCost.toFixed(2)}`,
     };
 
     // If all nodes are in MST, we're done
@@ -85,8 +91,10 @@ export function* primGenerator(
         currentNode: null,
         visitedNodes: visited,
         queuedNodes: [],
-        activeEdges: mstEdges,
-        explanation: `✓ Minimum Spanning Tree complete! Total cost: ${totalCost.toFixed(2)}. Edges: ${mstEdges.length}`,
+        activeEdges: [],
+        mstEdges: [...mstEdges],
+        mstCost: totalCost,
+        explanation: `✅ Minimum Spanning Tree complete! Total cost: ${totalCost.toFixed(2)}. Edges: ${mstEdges.length}`,
       };
       return;
     }
@@ -107,8 +115,10 @@ export function* primGenerator(
       currentNode: minEdge.target,
       visitedNodes: [...visited],
       queuedNodes: Array.from(notInMST),
-      activeEdges: [...mstEdges, ...candidateEdges],
-      explanation: `Checking ${candidateEdges.length} candidate edges connecting MST to remaining nodes...`,
+      activeEdges: [...candidateEdges],
+      mstEdges: [...mstEdges],
+      mstCost: totalCost,
+      explanation: `🔍 Checking ${candidateEdges.length} candidate edges connecting MST to remaining nodes...`,
     };
   }
 
@@ -118,7 +128,9 @@ export function* primGenerator(
     currentNode: null,
     visitedNodes: visited,
     queuedNodes: [],
-    activeEdges: mstEdges,
-    explanation: `✓ Minimum Spanning Tree complete! Total cost: ${totalCost.toFixed(2)}`,
+    activeEdges: [],
+    mstEdges: [...mstEdges],
+    mstCost: totalCost,
+    explanation: `✅ Minimum Spanning Tree complete! Total cost: ${totalCost.toFixed(2)}`,
   };
 }

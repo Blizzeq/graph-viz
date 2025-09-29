@@ -20,6 +20,12 @@ export interface AlgorithmStep {
   previous?: Record<string, string | null>;
   explanation: string;
   pathSoFar?: string[];
+  // For A* algorithm - f-scores (g + h)
+  fScores?: Record<string, number>;
+  // For MST algorithms (Prim, Kruskal) - edges that are part of the MST
+  mstEdges?: string[];
+  // For MST algorithms - total cost of MST so far
+  mstCost?: number;
 }
 
 export interface AlgorithmState {

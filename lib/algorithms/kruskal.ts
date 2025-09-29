@@ -66,7 +66,9 @@ export function* kruskalGenerator(
     visitedNodes: [],
     queuedNodes: nodeIds,
     activeEdges: [],
-    explanation: `Starting Kruskal's MST algorithm. Sorted ${sortedEdges.length} edges by weight.`,
+    mstEdges: [],
+    mstCost: 0,
+    explanation: `🌳 Starting Kruskal's MST algorithm. Sorted ${sortedEdges.length} edges by weight.`,
   };
 
   let stepNum = 1;
@@ -83,8 +85,10 @@ export function* kruskalGenerator(
       currentNode: source,
       visitedNodes: visited,
       queuedNodes: [],
-      activeEdges: [...mstEdges, id],
-      explanation: `Checking edge ${source}→${target} (weight ${weight}). Does it create a cycle?`,
+      activeEdges: [id],
+      mstEdges: [...mstEdges],
+      mstCost: totalCost,
+      explanation: `🔍 Checking edge ${source}→${target} (weight ${weight}). Does it create a cycle?`,
     };
 
     // Check if adding this edge creates a cycle
@@ -102,8 +106,10 @@ export function* kruskalGenerator(
         currentNode: target,
         visitedNodes: [...visited],
         queuedNodes: [],
-        activeEdges: [...mstEdges],
-        explanation: `✓ Added edge ${source}→${target} (weight ${weight}) to MST. Total cost: ${totalCost.toFixed(2)}. Edges: ${edgesAdded}/${targetEdges}`,
+        activeEdges: [id],
+        mstEdges: [...mstEdges],
+        mstCost: totalCost,
+        explanation: `✅ Added edge ${source}→${target} (weight ${weight}) to MST. Total cost: ${totalCost.toFixed(2)}. Edges: ${edgesAdded}/${targetEdges}`,
       };
     } else {
       // Creates cycle - skip
@@ -113,8 +119,10 @@ export function* kruskalGenerator(
         currentNode: null,
         visitedNodes: visited,
         queuedNodes: [],
-        activeEdges: [...mstEdges],
-        explanation: `✗ Skipped edge ${source}→${target} - would create a cycle.`,
+        activeEdges: [],
+        mstEdges: [...mstEdges],
+        mstCost: totalCost,
+        explanation: `❌ Skipped edge ${source}→${target} - would create a cycle.`,
       };
     }
   }
@@ -126,8 +134,10 @@ export function* kruskalGenerator(
       currentNode: null,
       visitedNodes: visited,
       queuedNodes: [],
-      activeEdges: mstEdges,
-      explanation: `✓ Minimum Spanning Tree complete! Total cost: ${totalCost.toFixed(2)}. Edges: ${mstEdges.length}`,
+      activeEdges: [],
+      mstEdges: [...mstEdges],
+      mstCost: totalCost,
+      explanation: `✅ Minimum Spanning Tree complete! Total cost: ${totalCost.toFixed(2)}. Edges: ${mstEdges.length}`,
     };
   } else {
     yield {
@@ -136,7 +146,9 @@ export function* kruskalGenerator(
       currentNode: null,
       visitedNodes: visited,
       queuedNodes: [],
-      activeEdges: mstEdges,
+      activeEdges: [],
+      mstEdges: [...mstEdges],
+      mstCost: totalCost,
       explanation: `⚠️ Graph is disconnected. MST only includes ${edgesAdded + 1} components. Total cost: ${totalCost.toFixed(2)}`,
     };
   }

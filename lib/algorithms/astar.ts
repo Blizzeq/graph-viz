@@ -53,8 +53,9 @@ export function* astarGenerator(
     queuedNodes: [startNode],
     activeEdges: [],
     distances: { ...gScore },
+    fScores: { ...fScore },
     previous: { ...previous },
-    explanation: `Starting A* from ${startNode} to ${endNode}. Using Euclidean distance as heuristic.`,
+    explanation: `🎯 Starting A* from ${startNode} to ${endNode}. Using Euclidean distance as heuristic.`,
   };
 
   let stepNum = 1;
@@ -91,9 +92,10 @@ export function* astarGenerator(
         queuedNodes: [],
         activeEdges: [],
         distances: { ...gScore },
+        fScores: { ...fScore },
         previous: { ...previous },
         pathSoFar: path,
-        explanation: `Found shortest path! Total cost: ${gScore[endNode].toFixed(2)}. Path: ${path.join(" → ")}`,
+        explanation: `✅ Found shortest path! Total cost: ${gScore[endNode].toFixed(2)}. Path: ${path.join(" → ")}`,
       };
       return;
     }
@@ -110,6 +112,7 @@ export function* astarGenerator(
       queuedNodes: Array.from(openSet),
       activeEdges: [],
       distances: { ...gScore },
+      fScores: { ...fScore },
       previous: { ...previous },
       explanation: `Visiting node ${current}. f(${current}) = g(${gScore[current].toFixed(1)}) + h(${(fScore[current] - gScore[current]).toFixed(1)}) = ${fScore[current].toFixed(1)}`,
     };
@@ -146,8 +149,9 @@ export function* astarGenerator(
         queuedNodes: Array.from(openSet),
         activeEdges: [`${current}-${neighbor.nodeId}`, `${neighbor.nodeId}-${current}`],
         distances: { ...gScore },
+        fScores: { ...fScore },
         previous: { ...previous },
-        explanation: `Updated ${neighbor.nodeId}: g=${gScore[neighbor.nodeId].toFixed(1)}, h=${heuristic(neighbor.nodeId, endNode, graph).toFixed(1)}, f=${fScore[neighbor.nodeId].toFixed(1)}`,
+        explanation: `✓ Updated ${neighbor.nodeId}: g=${gScore[neighbor.nodeId].toFixed(1)}, h=${heuristic(neighbor.nodeId, endNode, graph).toFixed(1)}, f=${fScore[neighbor.nodeId].toFixed(1)}`,
       };
     }
   }
@@ -161,7 +165,8 @@ export function* astarGenerator(
     queuedNodes: [],
     activeEdges: [],
     distances: { ...gScore },
+    fScores: { ...fScore },
     previous: { ...previous },
-    explanation: `No path found from ${startNode} to ${endNode}.`,
+    explanation: `❌ No path found from ${startNode} to ${endNode}.`,
   };
 }

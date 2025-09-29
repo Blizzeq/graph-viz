@@ -39,11 +39,13 @@ function GraphCanvasInner() {
   const removeNode = useGraphStore((state) => state.removeNode);
   const addEdgeToStore = useGraphStore((state) => state.addEdge);
   const removeEdge = useGraphStore((state) => state.removeEdge);
+  const shouldFitView = useGraphStore((state) => state.shouldFitView);
+  const resetFitView = useGraphStore((state) => state.resetFitView);
 
   const [tempEdgeStart, setTempEdgeStart] = useState<string | null>(null);
   const [tempEdgeEnd, setTempEdgeEnd] = useState<string | null>(null);
   const [showWeightDialog, setShowWeightDialog] = useState(false);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, fitView } = useReactFlow();
 
   // Reset temp edge state when mode changes
   useEffect(() => {
@@ -58,6 +60,16 @@ function GraphCanvasInner() {
     setTempEdgeEnd(null);
     setShowWeightDialog(false);
   }, [graph.nodes.length]);
+
+  // Trigger fit view when requested
+  useEffect(() => {
+    if (shouldFitView) {
+      setTimeout(() => {
+        fitView({ padding: 0.2, duration: 300 });
+        resetFitView();
+      }, 0);
+    }
+  }, [shouldFitView, fitView, resetFitView]);
 
   const { nodes: initialNodes, edges: initialEdges } = useMemo(
     () => graphToReactFlow(graph),

@@ -10,6 +10,60 @@ export interface RandomGraphOptions {
   canvasHeight?: number;
 }
 
+// Helper function: check if position is too close to existing nodes
+function isTooClose(x: number, y: number, existingNodes: Node[], minDistance: number): boolean {
+  for (const node of existingNodes) {
+    const dx = x - node.x;
+    const dy = y - node.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < minDistance) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Helper function: generate random nodes with minimum distance constraint
+function generateRandomNodesWithMinDistance(
+  nodeCount: number,
+  canvasWidth: number,
+  canvasHeight: number,
+  baseMinDistance: number
+): Node[] {
+  const nodes: Node[] = [];
+  const margin = 80;
+  const maxAttemptsPerNode = 100;
+  let currentMinDistance = baseMinDistance;
+
+  for (let i = 0; i < nodeCount; i++) {
+    // Generate ID: A-Z, then AA-ZZ for 27-50 nodes
+    const id = i < 26
+      ? String.fromCharCode(65 + i)
+      : String.fromCharCode(65 + Math.floor((i - 26) / 26)) + String.fromCharCode(65 + ((i - 26) % 26));
+    let placed = false;
+    let attempts = 0;
+
+    while (!placed && attempts < maxAttemptsPerNode) {
+      const x = Math.random() * (canvasWidth - 2 * margin) + margin;
+      const y = Math.random() * (canvasHeight - 2 * margin) + margin;
+
+      if (!isTooClose(x, y, nodes, currentMinDistance)) {
+        nodes.push({ id, label: id, x, y });
+        placed = true;
+      }
+      attempts++;
+    }
+
+    // If couldn't place after max attempts, reduce minimum distance and try again
+    if (!placed) {
+      currentMinDistance = Math.max(currentMinDistance - 10, 40);
+      i--; // Retry this node
+    }
+  }
+
+  return nodes;
+}
+
 export function generateRandomGraph(options: RandomGraphOptions): Graph {
   const {
     nodeCount,
@@ -21,22 +75,36 @@ export function generateRandomGraph(options: RandomGraphOptions): Graph {
     canvasHeight = 600,
   } = options;
 
-  const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  // Generate nodes with random positions
-  for (let i = 0; i < nodeCount; i++) {
-    const id = String.fromCharCode(65 + i); // A, B, C, ...
-    const x = Math.random() * (canvasWidth - 200) + 100; // Margin of 100px
-    const y = Math.random() * (canvasHeight - 200) + 100;
+  // Adjust canvas size and minimum distance based on node count
+  let actualCanvasWidth = canvasWidth;
+  let actualCanvasHeight = canvasHeight;
+  let minDistance = 100;
 
-    nodes.push({
-      id,
-      label: id,
-      x,
-      y,
-    });
+  if (nodeCount <= 8) {
+    minDistance = 100;
+  } else if (nodeCount <= 15) {
+    minDistance = 80;
+    actualCanvasWidth = 1000;
+    actualCanvasHeight = 700;
+  } else if (nodeCount <= 26) {
+    minDistance = 60;
+    actualCanvasWidth = 1200;
+    actualCanvasHeight = 800;
+  } else {
+    minDistance = 50;
+    actualCanvasWidth = 1600;
+    actualCanvasHeight = 1000;
   }
+
+  // Generate nodes with minimum distance constraint
+  const nodes = generateRandomNodesWithMinDistance(
+    nodeCount,
+    actualCanvasWidth,
+    actualCanvasHeight,
+    minDistance
+  );
 
   // Calculate maximum possible edges
   const maxEdges = directed

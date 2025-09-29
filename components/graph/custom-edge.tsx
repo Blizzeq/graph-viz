@@ -25,6 +25,7 @@ function CustomEdgeComponent({
 
   const isActive = currentStep?.activeEdges.includes(id);
   const isInPath = currentStep?.pathSoFar && currentStep.pathSoFar.length > 1;
+  const isInMST = currentStep?.mstEdges?.includes(id);
 
   // Calculate if edge is part of the path
   let isPartOfPath = false;
@@ -52,12 +53,14 @@ function CustomEdgeComponent({
   });
 
   const edgeColor = isPartOfPath
-    ? "#9333ea"
+    ? "#9333ea" // Purple for shortest path
+    : isInMST
+    ? "#10b981" // Green for MST edges
     : isActive
-    ? "#fbbf24"
-    : "#94a3b8";
+    ? "#fbbf24" // Amber for currently checking
+    : "#94a3b8"; // Gray for default
 
-  const edgeWidth = isPartOfPath ? 3 : isActive ? 2 : 1.5;
+  const edgeWidth = isPartOfPath ? 3 : isInMST ? 3 : isActive ? 2 : 1.5;
 
   return (
     <>

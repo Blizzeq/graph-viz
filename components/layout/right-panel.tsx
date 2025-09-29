@@ -32,10 +32,17 @@ export function RightPanel() {
   };
 
   const getTotalCost = () => {
+    // For MST algorithms, show MST cost
+    if (currentStep?.mstCost !== undefined) {
+      return currentStep.mstCost.toFixed(1);
+    }
+    // For pathfinding algorithms, show distance to end node
     if (!currentStep || !currentStep.distances || !endNode) return "-";
     const cost = currentStep.distances[endNode];
-    return cost === Infinity ? "∞" : cost;
+    return cost === Infinity ? "∞" : cost.toFixed(1);
   };
+
+  const isMSTAlgorithm = algorithm === "prim" || algorithm === "kruskal";
 
   return (
     <div className="w-80 border-l border-border bg-card p-4 overflow-y-auto">
@@ -64,9 +71,15 @@ export function RightPanel() {
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Path Cost</p>
+              <p className="text-xs text-muted-foreground">{isMSTAlgorithm ? "MST Cost" : "Path Cost"}</p>
               <p className="text-2xl font-bold">{getTotalCost()}</p>
             </div>
+            {isMSTAlgorithm && currentStep?.mstEdges && (
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground">MST Edges</p>
+                <p className="text-2xl font-bold">{currentStep.mstEdges.length}</p>
+              </div>
+            )}
           </div>
 
           {algorithm && (
@@ -106,6 +119,12 @@ export function RightPanel() {
             <div className="w-4 h-4 rounded-full bg-purple-600 border border-purple-700" />
             <span className="text-sm">Shortest Path</span>
           </div>
+          {isMSTAlgorithm && (
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-1 bg-green-500" />
+              <span className="text-sm">MST Edge</span>
+            </div>
+          )}
         </CardContent>
       </Card>
 

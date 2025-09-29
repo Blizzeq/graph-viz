@@ -8,6 +8,7 @@ interface GraphStore {
   editMode: EditMode;
   selectedNodes: string[];
   selectedEdges: string[];
+  shouldFitView: boolean;
 
   // Graph mutations
   setGraph: (graph: Graph) => void;
@@ -29,6 +30,10 @@ interface GraphStore {
 
   // Edit mode
   setEditMode: (mode: EditMode) => void;
+
+  // Fit view trigger
+  triggerFitView: () => void;
+  resetFitView: () => void;
 }
 
 export const useGraphStore = create<GraphStore>((set, get) => {
@@ -46,6 +51,7 @@ export const useGraphStore = create<GraphStore>((set, get) => {
     editMode: "select",
     selectedNodes: [],
     selectedEdges: [],
+    shouldFitView: false,
 
     setGraph: (graph) => {
       graphManager.setGraph(graph);
@@ -132,6 +138,14 @@ export const useGraphStore = create<GraphStore>((set, get) => {
 
     setEditMode: (mode) => {
       set({ editMode: mode, selectedNodes: [], selectedEdges: [] });
+    },
+
+    triggerFitView: () => {
+      set({ shouldFitView: true });
+    },
+
+    resetFitView: () => {
+      set({ shouldFitView: false });
     },
   };
 });
