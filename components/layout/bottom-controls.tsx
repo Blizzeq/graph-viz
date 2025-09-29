@@ -10,7 +10,8 @@ import {
   Pause,
   ChevronRight,
   SkipForward,
-  RotateCcw
+  RotateCcw,
+  Zap
 } from "lucide-react";
 import { useAlgorithmStore } from "@/lib/store/algorithm-store";
 import { useGraphStore } from "@/lib/store/graph-store";
@@ -65,6 +66,24 @@ export function BottomControls() {
     if (isPlaying) return "Playing...";
     if (isAtEnd) return "Complete";
     return "Paused";
+  };
+
+  const handleInstantSolve = () => {
+    // If no steps yet, generate them first
+    if (!hasSteps && canRun && algorithm && startNode) {
+      const newSteps = runAlgorithm(algorithm, graph, startNode, endNode);
+      setSteps(newSteps);
+      // Skip to end immediately
+      if (newSteps.length > 0) {
+        setPlaying(false);
+        setTimeout(() => {
+          skipToEnd();
+        }, 0);
+      }
+    } else if (hasSteps) {
+      // If already have steps, just skip to end
+      skipToEnd();
+    }
   };
 
   return (
@@ -131,18 +150,27 @@ export function BottomControls() {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3 min-w-[200px]">
+        <div className="flex items-center gap-3">
           <span className="text-sm text-muted-foreground">Speed:</span>
           <Slider
             value={[speed]}
             onValueChange={(values) => setSpeed(values[0])}
             min={0.5}
-            max={3}
+            max={10}
             step={0.1}
             className="w-32"
-            disabled={!hasSteps}
           />
           <span className="text-sm font-medium w-12">{speed.toFixed(1)}x</span>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="gap-1.5 ml-2"
+            disabled={!canRun && !hasSteps}
+            onClick={handleInstantSolve}
+          >
+            <Zap className="h-3.5 w-3.5" />
+            Instant
+          </Button>
         </div>
 
         <Separator orientation="vertical" className="h-8" />
